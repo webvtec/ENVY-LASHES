@@ -205,9 +205,13 @@
             <option value="Quick Weave">Quick Weave</option>
             <option value="Ponytails">Ponytails</option>
             <option value="Natural Hair">Natural Hair</option>
+            <option value="Wigs">Wigs</option>
           </select>
         </div>
-        <div id="uploadProgress" style="display:none; text-align:center; color:var(--terra); font-weight:700; margin-bottom:20px;"></div>
+        <div id="uploadProgress" style="display:none; text-align:center; color:var(--terra); font-weight:700; margin-bottom:20px;">
+          <div id="uploadProgressLabel" style="margin-bottom:8px;"></div>
+          <progress id="uploadProgressBar" value="0" max="100" style="width:100%; height:8px; border-radius:4px; accent-color:var(--terra);"></progress>
+        </div>
         <div id="galleryContainer"></div>
       </div>
     </div>
@@ -320,7 +324,28 @@
     function showPage(e){document.querySelectorAll(".page").forEach(e=>e.classList.remove("active")),document.querySelectorAll(".nav-tab").forEach(e=>e.classList.remove("active")),document.getElementById(e).classList.add("active"),event.target.classList.add("active"),"galleryPage"===e&&loadGallery(),"reservationsPage"===e&&loadReservations(),"unavailablePage"===e&&loadUnavailableDates()}
     function toggleTimeInputs(){document.getElementById("timeInputs").style.display=document.getElementById("allDayCheckbox").checked?"none":"block"}
     function loadGallery(){const e=document.getElementById("galleryContainer");e.innerHTML='<p style="text-align:center; color:var(--muted);">Loading gallery...</p>',db.collection("gallery").orderBy("sortOrder","asc").onSnapshot(t=>{if(t.empty)return void(e.innerHTML='<div class="empty-state"><div class="empty-icon">📸</div><div class="empty-text">No photos yet. Upload your first image!</div></div>');const a={};t.forEach(e=>{const t=e.data(),n=t.category||"Uncategorized";a[n]||(a[n]=[]),a[n].push({id:e.id,...t})}),e.innerHTML="";for(const t in a){const n=document.createElement("div");n.style.marginBottom="32px";const o=document.createElement("div");o.style.cssText="font-family:DM Serif Display,serif; font-size:20px; color:var(--ink); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--terra);",o.textContent=t,n.appendChild(o);const l=document.createElement("div");l.className="gallery-scroll",a[t].forEach(e=>{const t=document.createElement("div");t.className="gallery-item",t.innerHTML=`<img src="${e.url}" alt="${t}" loading="lazy"><div class="gallery-item-overlay"><button class="btn btn-danger" onclick="deleteImage('${e.id}', '${e.url}')">Delete</button></div>`,l.appendChild(t)}),n.appendChild(l),e.appendChild(n)}})}
-    async function uploadImages(){const e=document.getElementById("imageInput").files,t=document.getElementById("categoryInput").value,a=document.getElementById("uploadProgress");if(0!==e.length){a.style.display="block",a.textContent="Uploading...";try{for(let n=0;n<e.length;n++){const o=e[n],l=storage.ref("gallery/"+Date.now()+"_"+o.name);await l.put(o);const r=await l.getDownloadURL(),i=await db.collection("gallery").orderBy("sortOrder","desc").limit(1).get();let c=0;i.empty||(c=(i.docs[0].data().sortOrder||0)+1),await db.collection("gallery").add({url:r,category:t,sortOrder:c,timestamp:firebase.firestore.FieldValue.serverTimestamp()})}a.textContent="✓ Upload complete!",document.getElementById("imageInput").value="",setTimeout(()=>{a.style.display="none"},2e3)}catch(e){a.textContent="✕ Upload failed: "+e.message,a.style.color="#C84630"}}}
+    async function uploadImages(){
+      const files=document.getElementById("imageInput").files,category=document.getElementById("categoryInput").value;
+      const progress=document.getElementById("uploadProgress"),label=document.getElementById("uploadProgressLabel"),bar=document.getElementById("uploadProgressBar");
+      if(!files.length)return;
+      progress.style.display="block"; bar.value=0;
+      try{
+        for(let i=0;i<files.length;i++){
+          label.textContent=`Uploading ${i+1} of ${files.length}...`;
+          bar.value=(i/files.length)*100;
+          const file=files[i],ref=storage.ref("gallery/"+Date.now()+"_"+file.name);
+          await ref.put(file);
+          const url=await ref.getDownloadURL();
+          const snap=await db.collection("gallery").orderBy("sortOrder","desc").limit(1).get();
+          let sortOrder=0;if(!snap.empty)sortOrder=(snap.docs[0].data().sortOrder||0)+1;
+          await db.collection("gallery").add({url,category,sortOrder,timestamp:firebase.firestore.FieldValue.serverTimestamp()});
+        }
+        bar.value=100;
+        label.textContent=`✓ ${files.length} photo${files.length>1?"s":""} uploaded!`;
+        document.getElementById("imageInput").value="";
+        setTimeout(()=>{progress.style.display="none";bar.value=0;},2500);
+      }catch(e){label.textContent="✕ Upload failed: "+e.message;label.style.color="#C84630";}
+    }
     function deleteImage(e,t){confirm("Delete this image?")&&storage.refFromURL(t).delete().then(()=>db.collection("gallery").doc(e).delete()).then(()=>showToast("Image deleted")).catch(e=>alert("Delete failed: "+e.message))}
     function loadReservations(){const e=document.getElementById("reservationsList"),t=document.getElementById("statusFilter").value,a=document.getElementById("depositFilter").value,n=document.getElementById("dateFilter").value;e.innerHTML='<p style="text-align:center; color:var(--muted);">Loading reservations...</p>',db.collection("bookings").orderBy("date","desc").onSnapshot(o=>{let l=[];o.forEach(e=>{const o=e.data();let r=!0;"all"!==t&&("active"===t&&"Cancelled"===o.status&&(r=!1),"Cancelled"===t&&"Cancelled"!==o.status&&(r=!1)),"all"!==a&&o.deposit!==a&&(r=!1),n&&o.date!==n&&(r=!1),r&&l.push({id:e.id,...o})});const r=new Date().toISOString().split("T")[0];if(document.getElementById("statTotal").textContent=l.filter(e=>"Cancelled"!==e.status).length,document.getElementById("statToday").textContent=l.filter(e=>e.date===r&&"Cancelled"!==e.status).length,document.getElementById("statPending").textContent=l.filter(e=>"Pending"===e.deposit&&"Cancelled"!==e.status).length,document.getElementById("statConfirmed").textContent=l.filter(e=>"Made"===e.deposit&&"Cancelled"!==e.status).length,0===l.length)return void(e.innerHTML='<div class="empty-state"><div class="empty-icon">📅</div><div class="empty-text">No bookings match your filters.</div></div>');e.innerHTML="",l.forEach(t=>{let a="Unknown Date";try{if(t.date){const[e,n,o]=t.date.split("-").map(Number);e&&n&&o&&(a=new Date(e,n-1,o).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"}))}}catch(e){}const n="Made"===t.deposit||"Yes"===t.deposit,o="Cancelled"===t.status,l=document.createElement("div");l.className="reservation-card",l.dataset.id=t.id,o&&(l.style.opacity="0.6"),l.innerHTML=`<p><strong>Booking #:</strong> ${t.bookingNumber||"N/A"}</p><p><strong>👤 Name:</strong> ${t.name||"N/A"}</p><p><strong>📞 Phone:</strong> ${t.phone||"N/A"}</p><p><strong>📅 Date:</strong> ${a}</p><p><strong>⏰ Time:</strong> ${t.time||"N/A"}</p>${t.service?`<p><strong>✦ Service:</strong> ${t.service}</p>`:""}<p><strong>💳 Deposit:</strong> <span style="color:${n?"var(--sage)":"var(--terra)"}; font-weight:700;">${n?"Confirmed ✓":"Pending ⚠️"}</span></p>${t.total?`<p><strong>💰 Total:</strong> <span style="color:var(--terra); font-weight:700;">$${Number(t.total).toLocaleString()}</span></p>`:""}<p><strong>Status:</strong> <span style="color:${o?"#C84630":"var(--sage)"}; font-weight:700;">${o?"Cancelled ✕":"Active ✓"}</span></p><div class="reservation-actions"><button class="btn btn-secondary" onclick="updateDeposit('${t.id}')">💳 Deposit</button><button class="btn btn-neutral" onclick="updateStatus('${t.id}')">Status</button>${o?"":`<button class="btn btn-danger" onclick="cancelReservation('${t.id}')">Cancel</button>`}</div>`,e.appendChild(l)})})}
     function clearFilters(){document.getElementById("statusFilter").value="all",document.getElementById("depositFilter").value="all",document.getElementById("dateFilter").value="",loadReservations()}
