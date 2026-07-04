@@ -49,7 +49,11 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Jost', sans-serif;
-  background: #000000;
+  background-color: #000000;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='150'%3E%3Ctext x='6' y='96' font-family='Georgia, serif' font-style='italic' font-size='26' fill='rgba(201,162,39,0.11)' transform='rotate(-16 110 75)'%3EEnvy%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 220px 150px;
+  background-attachment: fixed;
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
@@ -419,9 +423,9 @@ body::before {
   position: absolute;
   top: 10px; right: -10px;
   font-family: 'Playfair Display', serif;
-  font-size: clamp(70px, 22vw, 130px);
+  font-size: clamp(60px, 18vw, 108px);
   font-style: italic;
-  color: rgba(201,162,39,0.06);
+  color: rgba(201,162,39,0.32);
   line-height: 1;
   pointer-events: none;
   user-select: none;
@@ -1108,7 +1112,6 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: opacity(0.5); }
   <!-- STYLES VIEW -->
   <div class="view active" id="viewStyles">
     <div class="editorial-hero">
-      <div class="hero-bg-text">Envy</div>
       <div class="hero-eyebrow">Shop 20, Beecham Plaza · Ocho Rios, Jamaica</div>
       <h1 class="hero-title">
         Your <span class="italic">Signature</span><br>
@@ -1124,17 +1127,10 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: opacity(0.5); }
     </div>
 
     <div class="hero-meta-row">
-      <div class="hero-meta">Premium brow &amp; beauty studio.<br>Mon – Sat · 8 AM – 5 PM.</div>
+      <div class="hero-meta">Mon – Sat · 8 AM – 5 PM.</div>
       <div class="hero-ctas">
         <button class="btn-editorial primary" onclick="switchTab('viewBook')">Book Appointment →</button>
       </div>
-    </div>
-
-    <div class="gallery-filter-row" id="galleryFilterRow">
-      <button class="gallery-filter-btn active" onclick="filterGallery('all', this)">All</button>
-      <button class="gallery-filter-btn" onclick="filterGallery('Lashes', this)">Lashes</button>
-      <button class="gallery-filter-btn" onclick="filterGallery('Waxing', this)">Waxing</button>
-      <button class="gallery-filter-btn" onclick="filterGallery('Tooth Care', this)">Tooth Care</button>
     </div>
 
     <div id="galleryDisplay"></div>
