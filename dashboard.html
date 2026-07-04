@@ -3,50 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NATASHA BEAUTY — Admin Dashboard</title>
+  <title>ENVY — Admin Dashboard</title>
 
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
 
   <style>
     :root {
-      --terra:     #C4622D;
-      --terra2:    #A84E22;
-      --terra3:    #8C3D18;
-      --terrafade: rgba(196,98,45,0.12);
-      --sage:      #6B8C6E;
-      --sage2:     #537356;
-      --sagefade:  rgba(107,140,110,0.15);
-      --cream:     #F5F0E8;
-      --cream2:    #EDE5D8;
-      --cream3:    #E4D9C8;
-      --parch:     #D9CEB8;
-      --ink:       #1A150E;
-      --ink2:      #2D2419;
-      --muted:     #7A6E60;
-      --mutedlt:   #A89E90;
-      --line:      rgba(26,21,14,0.1);
-      --lineheavy: rgba(26,21,14,0.2);
-    }
+      --terra:     #14C97A;
+      --terra2:    #0C8F52;
+      --terra3:    #063B27;
+      --terrafade: rgba(20,201,122,0.16);
+      --gold:      #C9A227;
+      --gold2:     #F0CE7C;
+      --gold-deep: #8A6B1E;
+      --goldfade:  rgba(201,162,39,0.14);
+      --sage:      #6FA377;
+      --sage2:     #47714F;
+      --sagefade:  rgba(111,163,119,0.15);
+      --cream:     #000000;
+      --cream2:    #0C120E;
+      --cream3:    #121B15;
+      --parch:     rgba(201,162,39,0.16);
+      --ink:       #020403;
+      --ink2:      #080C09;
+      --muted:     #92A896;
+      --mutedlt:   #5E7063;
+      --line: rgba(201,162,39,0.08);
+      --lineheavy: rgba(201,162,39,0.16);
+    
+  --text:      #F5F7F1;
+  --text-dim:  #CAD3C4;
+}
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Space Mono', monospace;
-      background: var(--cream);
-      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      background: #000000;
+      color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
     }
 
     ::-webkit-scrollbar { width: 8px; }
     ::-webkit-scrollbar-track { background: var(--cream2); }
-    ::-webkit-scrollbar-thumb { background: var(--terra); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--terra); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--terra2); }
 
     #accessOverlay {
@@ -54,47 +61,47 @@
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       z-index: 9999; gap: 24px;
     }
-    .overlay-logo {font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--ink); margin-bottom: 8px;}
-    #accessStatus {font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 400; letter-spacing: 1px; color: var(--muted); text-transform: uppercase;}
+    .overlay-logo {font-family: 'Playfair Display', serif; font-weight: 600; font-size: 28px; color: var(--text); margin-bottom: 8px; text-shadow: 0 0 20px rgba(20,201,122,0.3);}
+    #accessStatus {font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 400; letter-spacing: 1px; color: var(--muted); text-transform: uppercase;}
     .spinner {width: 40px; height: 40px; border: 3px solid var(--parch); border-top: 3px solid var(--terra); border-radius: 50%; animation: spin 1s linear infinite;}
     @keyframes spin {0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 
-    .header {background: var(--ink2); border-bottom: 1px solid var(--line); padding: 16px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(26,21,14,0.06);}
+    .header {background: var(--ink); border-bottom: 1px solid rgba(20,201,122,0.3); padding: 16px 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.5);}
     .header-inner {max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;}
-    .header-logo {font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--cream);}
-    .header-logo span {color: var(--terra); font-style: italic;}
-    .header-btn {font-family: 'Space Mono', monospace; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 16px; border-radius: 2px; background: var(--terra); color: #fff; border: none; cursor: pointer; transition: all 0.22s;}
-    .header-btn:hover {background: var(--terra2);}
+    .header-logo {font-family: 'Playfair Display', serif; font-weight: 600; font-size: 20px; color: var(--text);}
+    .header-logo span {background: linear-gradient(120deg, var(--gold-deep), var(--gold2) 50%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; font-style: italic;}
+    .header-btn {font-family: 'Jost', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 16px; border-radius: 10px; background: linear-gradient(135deg, var(--terra2), var(--terra)); color: var(--ink); border: 1px solid rgba(201,162,39,0.4); cursor: pointer; transition: all 0.22s; box-shadow: 0 4px 14px rgba(20,201,122,0.3);}
+    .header-btn:hover {background: var(--terra2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20,201,122,0.3);}
 
     .nav-tabs {background: var(--cream2); border-bottom: 1px solid var(--line); display: flex; gap: 0; padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;}
     .nav-tabs::-webkit-scrollbar {display: none;}
-    .nav-tab {font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; transition: all 0.22s; white-space: nowrap;}
-    .nav-tab:hover {color: var(--ink); background: var(--terrafade);}
+    .nav-tab {font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; transition: all 0.22s; white-space: nowrap;}
+    .nav-tab:hover {color: var(--text); background: var(--terrafade);}
     .nav-tab.active {color: var(--terra); border-bottom-color: var(--terra); background: var(--terrafade);}
 
     .container {max-width: 1200px; margin: 0 auto; padding: 28px 20px;}
     .page {display: none;}
     .page.active {display: block;}
-    .page-title {font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--ink); margin-bottom: 8px;}
+    .page-title {font-family: 'Playfair Display', serif; font-size: 28px; color: var(--text); margin-bottom: 8px;}
     .page-subtitle {font-size: 12px; color: var(--muted); margin-bottom: 28px; letter-spacing: 0.5px;}
 
     .form-group {margin-bottom: 18px;}
     .form-label {display: block; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--terra); margin-bottom: 8px;}
-    .form-input, .form-select {width: 100%; padding: 12px 14px; font-family: 'Space Mono', monospace; font-size: 13px; background: var(--cream2); border: 1px solid var(--parch); border-radius: 2px; color: var(--ink); transition: all 0.22s;}
-    .form-input:focus, .form-select:focus {outline: none; border-color: var(--terra); background: #fff; box-shadow: 0 0 0 3px var(--terrafade);}
-    .form-select option {background: #fff; color: var(--ink);}
+    .form-input, .form-select {width: 100%; padding: 12px 14px; font-family: 'Jost', sans-serif; font-size: 13px; background: var(--cream2); border: 1px solid var(--parch); border-radius: 10px; color: var(--text); transition: all 0.22s;}
+    .form-input:focus, .form-select:focus {outline: none; border-color: var(--terra); background: var(--cream2); box-shadow: 0 0 0 3px var(--terrafade);}
+    .form-select option {background: var(--cream2); color: var(--text);}
 
-    .btn {font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 20px; border-radius: 2px; border: none; cursor: pointer; transition: all 0.22s; box-shadow: 0 2px 8px rgba(26,21,14,0.08);}
-    .btn-primary {background: var(--terra); color: #fff;}
-    .btn-primary:hover {background: var(--terra2); box-shadow: 0 4px 12px rgba(196,98,45,0.25);}
+    .btn {font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; transition: all 0.22s; box-shadow: 0 2px 8px rgba(0,0,0,0.08);}
+    .btn-primary {background: linear-gradient(135deg, var(--terra2), var(--terra)); color: var(--ink); border: 1px solid rgba(201,162,39,0.4); box-shadow: 0 4px 14px rgba(20,201,122,0.3);}
+    .btn-primary:hover {background: var(--terra2); box-shadow: 0 6px 18px rgba(20,201,122,0.35); transform: translateY(-1px);}
     .btn-secondary {background: var(--sage); color: #fff;}
-    .btn-secondary:hover {background: var(--sage2); box-shadow: 0 4px 12px rgba(107,140,110,0.25);}
+    .btn-secondary:hover {background: var(--sage2); box-shadow: 0 4px 12px rgba(111,163,119,0.25);}
     .btn-danger {background: #C84630; color: #fff;}
     .btn-danger:hover {background: #A83520;}
     .btn-neutral {background: var(--muted); color: #fff;}
     .btn-neutral:hover {background: var(--ink);}
 
-    .upload-area {border: 2px dashed var(--parch); border-radius: 4px; padding: 32px 24px; text-align: center; background: var(--cream2); cursor: pointer; transition: all 0.3s; position: relative; margin-bottom: 20px;}
+    .upload-area {border: 2px dashed var(--parch); border-radius: 10px; padding: 32px 24px; text-align: center; background: var(--cream2); cursor: pointer; transition: all 0.3s; position: relative; margin-bottom: 20px;}
     .upload-area:hover {background: var(--cream3); border-color: var(--terra);}
     .upload-area input[type="file"] {position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer;}
     .upload-icon {font-size: 36px; margin-bottom: 12px;}
@@ -103,50 +110,50 @@
 
     .gallery-scroll {display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 12px; margin-bottom: 24px;}
     .gallery-scroll::-webkit-scrollbar {display: none;}
-    .gallery-item {flex: 0 0 auto; width: 240px; height: 240px; position: relative; border-radius: 2px; overflow: hidden; border: 1px solid var(--parch); scroll-snap-align: start; transition: all 0.3s; background: var(--cream3);}
-    .gallery-item:hover {transform: scale(1.02); box-shadow: 0 4px 16px rgba(196,98,45,0.15);}
+    .gallery-item {flex: 0 0 auto; width: 240px; height: 240px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid var(--parch); scroll-snap-align: start; transition: all 0.3s; background: var(--cream3);}
+    .gallery-item:hover {transform: scale(1.02); box-shadow: 0 4px 16px rgba(20,201,122,0.15);}
     .gallery-item img {width: 100%; height: 100%; object-fit: cover;}
-    .gallery-item-overlay {position: absolute; inset: 0; background: rgba(26,21,14,0.85); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;}
+    .gallery-item-overlay {position: absolute; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;}
     .gallery-item:hover .gallery-item-overlay {opacity: 1;}
     .gallery-item-overlay button {margin: 0; padding: 8px 16px; font-size: 9px;}
 
     .stats-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 28px;}
-    .stat-card {background: var(--cream2); border: 1px solid var(--parch); border-radius: 4px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(26,21,14,0.05);}
-    .stat-value {font-family: 'DM Serif Display', serif; font-size: 32px; color: var(--terra); margin-bottom: 4px;}
+    .stat-card {background: var(--cream2); border: 1px solid var(--parch); border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05);}
+    .stat-value {font-family: 'Playfair Display', serif; font-size: 32px; color: var(--terra); margin-bottom: 4px;}
     .stat-label {font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted);}
 
     .filter-row {display: flex; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;}
     .filter-row .form-input, .filter-row .form-select {flex: 1; min-width: 160px; margin-bottom: 0;}
     .filter-row .btn {flex-shrink: 0;}
 
-    .reservation-card {background: #fff; border: 1px solid var(--parch); border-left: 4px solid var(--terra); border-radius: 4px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(26,21,14,0.05); transition: all 0.3s;}
-    .reservation-card:hover {box-shadow: 0 4px 16px rgba(196,98,45,0.12); transform: translateY(-2px);}
+    .reservation-card {background: var(--cream2); border: 1px solid var(--parch); border-left: 4px solid var(--terra); border-radius: 10px; padding: 18px; margin-bottom: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); transition: all 0.3s;}
+    .reservation-card:hover {box-shadow: 0 4px 16px rgba(20,201,122,0.12); transform: translateY(-2px);}
     .reservation-card.highlighted {animation: highlight-pulse 2s ease-in-out 3; border-left-color: var(--sage);}
-    @keyframes highlight-pulse {0%,100%{background:#fff}50%{background:var(--sagefade)}}
-    .reservation-card p {font-size: 12px; margin: 6px 0; color: var(--ink);}
+    @keyframes highlight-pulse {0%,100%{background:var(--cream2)}50%{background:var(--sagefade)}}
+    .reservation-card p {font-size: 12px; margin: 6px 0; color: var(--text);}
     .reservation-card strong {color: var(--terra); font-weight: 700;}
     .reservation-actions {display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap;}
     .reservation-actions .btn {flex: 1; min-width: 110px; padding: 9px 14px; font-size: 9px;}
 
     .unavailable-list {list-style: none; padding: 0; margin: 0;}
-    .unavailable-item {background: var(--cream2); border: 1px solid var(--parch); border-left: 3px solid var(--sage); padding: 14px 16px; border-radius: 4px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--ink);}
+    .unavailable-item {background: var(--cream2); border: 1px solid var(--parch); border-left: 3px solid var(--sage); padding: 14px 16px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text);}
 
     .checkbox-group {margin-bottom: 16px;}
-    .checkbox-group label {display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink); cursor: pointer;}
+    .checkbox-group label {display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text); cursor: pointer;}
     .checkbox-group input[type="checkbox"] {width: 18px; height: 18px; accent-color: var(--terra); cursor: pointer;}
 
-    .modal-overlay {display: none; position: fixed; inset: 0; background: rgba(26,21,14,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 2000; padding: 20px;}
+    .modal-overlay {display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); justify-content: center; align-items: center; z-index: 2000; padding: 20px;}
     .modal-overlay.open {display: flex;}
-    .modal-box {background: var(--cream); padding: 28px 24px; border-radius: 4px; max-width: 440px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(26,21,14,0.4); border: 1px solid var(--parch); border-top: 4px solid var(--terra);}
-    .modal-title {font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--ink); margin-bottom: 18px; text-align: center;}
+    .modal-box {background: var(--cream); padding: 28px 24px; border-radius: 10px; max-width: 440px; width: 100%; max-height: 80vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.4); border: 1px solid var(--parch); border-top: 4px solid var(--terra);}
+    .modal-title {font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); margin-bottom: 18px; text-align: center;}
 
     .radio-group {display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;}
-    .radio-option {display: flex; align-items: center; padding: 12px 14px; border: 1px solid var(--parch); border-radius: 4px; cursor: pointer; background: var(--cream2); transition: all 0.3s;}
+    .radio-option {display: flex; align-items: center; padding: 12px 14px; border: 1px solid var(--parch); border-radius: 10px; cursor: pointer; background: var(--cream2); transition: all 0.3s;}
     .radio-option:hover {background: var(--cream3); border-color: var(--terra);}
     .radio-option input[type="radio"] {margin-right: 12px; width: 16px; height: 16px; accent-color: var(--terra);}
-    .radio-option label {font-size: 13px; color: var(--ink); cursor: pointer; font-weight: 600;}
+    .radio-option label {font-size: 13px; color: var(--text); cursor: pointer; font-weight: 600;}
 
-    #toast {visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--ink2); color: var(--cream); padding: 14px 24px; border-radius: 4px; font-size: 12px; font-weight: 700; z-index: 3000; opacity: 0; transition: opacity 0.5s, bottom 0.5s; box-shadow: 0 8px 32px rgba(26,21,14,0.4); border: 1px solid var(--terra);}
+    #toast {visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--ink2); color: var(--text); padding: 14px 24px; border-radius: 10px; font-size: 12px; font-weight: 700; z-index: 3000; opacity: 0; transition: opacity 0.5s, bottom 0.5s; box-shadow: 0 8px 32px rgba(0,0,0,0.4); border: 1px solid var(--terra);}
 
     .empty-state {text-align: center; padding: 60px 20px; color: var(--muted);}
     .empty-icon {font-size: 48px; margin-bottom: 12px; opacity: 0.4;}
@@ -165,7 +172,7 @@
 <body>
 
   <div id="accessOverlay">
-    <div class="overlay-logo">NATASHA <span style="color:var(--terra); font-style:italic;">Beauty</span></div>
+    <div class="overlay-logo">EN<span style="color:var(--terra); font-style:italic;">VY</span></div>
     <div class="spinner"></div>
     <div id="accessStatus">Verifying access...</div>
   </div>
@@ -173,7 +180,7 @@
   <div id="dashboardContent" style="display:none;">
     <header class="header">
       <div class="header-inner">
-        <div class="header-logo">NATASHA <span>Admin</span></div>
+        <div class="header-logo">ENVY <span>Admin</span></div>
         <button class="header-btn" onclick="firebase.auth().signOut().then(() => window.location.href='index.html')">Logout</button>
       </div>
     </header>
@@ -197,16 +204,9 @@
         <div class="form-group">
           <label class="form-label">Category for Upload</label>
           <select id="categoryInput" class="form-select">
-            <option value="Braids">Braids</option>
-            <option value="Twists">Twists</option>
-            <option value="Locs">Locs</option>
-            <option value="Cornrows">Cornrows</option>
-            <option value="Weaves">Weaves</option>
-            <option value="Quick Weave">Quick Weave</option>
-            <option value="Sew In">Sew In</option>
-            <option value="Ponytails">Ponytails</option>
-            <option value="Natural Hair">Natural Hair</option>
-            <option value="Wigs">Wigs</option>
+            <option value="Lashes">Lashes</option>
+            <option value="Waxing">Waxing</option>
+            <option value="Tooth Care">Tooth Care</option>
           </select>
         </div>
         <div id="uploadProgress" style="display:none; text-align:center; color:var(--terra); font-weight:700; margin-bottom:20px;">
@@ -259,8 +259,8 @@
           </div>
           <button class="btn btn-primary" onclick="addUnavailableDate()">Add Unavailable Day</button>
         </div>
-        <div style="background:#fff; border:1px solid var(--parch); border-radius:4px; padding:24px;">
-          <h3 style="font-family:'DM Serif Display',serif; color:var(--ink); margin-bottom:18px; font-size:20px;">Blocked Dates</h3>
+        <div style="background:var(--cream2); border:1px solid var(--parch); border-radius:4px; padding:24px;">
+          <h3 style="font-family:'DM Serif Display',serif; color:var(--text); margin-bottom:18px; font-size:20px;">Blocked Dates</h3>
           <ul class="unavailable-list" id="unavailableDatesList"></ul>
         </div>
       </div>
@@ -324,7 +324,7 @@
     firebase.initializeApp(firebaseConfig);const db=firebase.firestore(),storage=firebase.storage();
     function showPage(e){document.querySelectorAll(".page").forEach(e=>e.classList.remove("active")),document.querySelectorAll(".nav-tab").forEach(e=>e.classList.remove("active")),document.getElementById(e).classList.add("active"),event.target.classList.add("active"),"galleryPage"===e&&loadGallery(),"reservationsPage"===e&&loadReservations(),"unavailablePage"===e&&loadUnavailableDates()}
     function toggleTimeInputs(){document.getElementById("timeInputs").style.display=document.getElementById("allDayCheckbox").checked?"none":"block"}
-    function loadGallery(){const e=document.getElementById("galleryContainer");e.innerHTML='<p style="text-align:center; color:var(--muted);">Loading gallery...</p>',db.collection("gallery").orderBy("sortOrder","asc").onSnapshot(t=>{if(t.empty)return void(e.innerHTML='<div class="empty-state"><div class="empty-icon">📸</div><div class="empty-text">No photos yet. Upload your first image!</div></div>');const a={};t.forEach(e=>{const t=e.data(),n=t.category||"Uncategorized";a[n]||(a[n]=[]),a[n].push({id:e.id,...t})}),e.innerHTML="";for(const t in a){const n=document.createElement("div");n.style.marginBottom="32px";const o=document.createElement("div");o.style.cssText="font-family:DM Serif Display,serif; font-size:20px; color:var(--ink); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--terra);",o.textContent=t,n.appendChild(o);const l=document.createElement("div");l.className="gallery-scroll",a[t].forEach(e=>{const t=document.createElement("div");t.className="gallery-item",t.innerHTML=`<img src="${e.url}" alt="${t}" loading="lazy"><div class="gallery-item-overlay"><button class="btn btn-danger" onclick="deleteImage('${e.id}', '${e.url}')">Delete</button></div>`,l.appendChild(t)}),n.appendChild(l),e.appendChild(n)}})}
+    function loadGallery(){const e=document.getElementById("galleryContainer");e.innerHTML='<p style="text-align:center; color:var(--muted);">Loading gallery...</p>',db.collection("gallery").orderBy("sortOrder","asc").onSnapshot(t=>{if(t.empty)return void(e.innerHTML='<div class="empty-state"><div class="empty-icon">📸</div><div class="empty-text">No photos yet. Upload your first image!</div></div>');const a={};t.forEach(e=>{const t=e.data(),n=t.category||"Uncategorized";a[n]||(a[n]=[]),a[n].push({id:e.id,...t})}),e.innerHTML="";for(const t in a){const n=document.createElement("div");n.style.marginBottom="32px";const o=document.createElement("div");o.style.cssText="font-family:DM Serif Display,serif; font-size:20px; color:var(--text); margin-bottom:14px; padding-bottom:8px; border-bottom:2px solid var(--terra);",o.textContent=t,n.appendChild(o);const l=document.createElement("div");l.className="gallery-scroll",a[t].forEach(e=>{const t=document.createElement("div");t.className="gallery-item",t.innerHTML=`<img src="${e.url}" alt="${t}" loading="lazy"><div class="gallery-item-overlay"><button class="btn btn-danger" onclick="deleteImage('${e.id}', '${e.url}')">Delete</button></div>`,l.appendChild(t)}),n.appendChild(l),e.appendChild(n)}})}
     async function uploadImages(){
       const files=document.getElementById("imageInput").files,category=document.getElementById("categoryInput").value;
       const progress=document.getElementById("uploadProgress"),label=document.getElementById("uploadProgressLabel"),bar=document.getElementById("uploadProgressBar");
