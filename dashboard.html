@@ -320,7 +320,14 @@
   </div>
 
   <script>
-    const firebaseConfig={apiKey:"AIzaSyCT0aEche1SGWjS_pEn0MmLQH6OGdZ07cU",authDomain:"devonte-cutz.firebaseapp.com",projectId:"devonte-cutz",storageBucket:"devonte-cutz.firebasestorage.app",messagingSenderId:"345703317013",appId:"1:345703317013:web:8b167d90841df86590d81c"};
+   const firebaseConfig = {
+  apiKey: "AIzaSyAKICleBSW7VxuqsnXDx3vdb4zyyyZCXkg",
+  authDomain: "envy-lashes.firebaseapp.com",
+  projectId: "envy-lashes",
+  storageBucket: "envy-lashes.firebasestorage.app",
+  messagingSenderId: "96263698175",
+  appId: "1:96263698175:web:282b979f3c94b57d053eca"
+};
     firebase.initializeApp(firebaseConfig);const db=firebase.firestore(),storage=firebase.storage();
     function showPage(e){document.querySelectorAll(".page").forEach(e=>e.classList.remove("active")),document.querySelectorAll(".nav-tab").forEach(e=>e.classList.remove("active")),document.getElementById(e).classList.add("active"),event.target.classList.add("active"),"galleryPage"===e&&loadGallery(),"reservationsPage"===e&&loadReservations(),"unavailablePage"===e&&loadUnavailableDates()}
     function toggleTimeInputs(){document.getElementById("timeInputs").style.display=document.getElementById("allDayCheckbox").checked?"none":"block"}
