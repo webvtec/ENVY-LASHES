@@ -1359,7 +1359,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 firebase.auth().onAuthStateChanged(user => { currentUser = user || null; loadReviews(currentUser); updateAuthButton(user); });
-const ADMIN_UID = "Vj3a2XPtWTamBVFi86OP1oZJMi63";
+const ADMIN_UID = "EyUItUL68JXMa66WkSfTUAOr8m33";
 
 function login() { document.getElementById('adminLoginModal').classList.add('open'); }
 function closeAdminModal() { document.getElementById('adminLoginModal').classList.remove('open'); document.getElementById('adminLoginMsg').style.display = 'none'; }
